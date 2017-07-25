@@ -5,8 +5,13 @@
 $(function(){
     var pn = location.pathname;
     if (pn == '/home/') {
-        $('.left .number').text($('.left .number').text() - 7);//extra words
+        var wordsTotal = 0;  
+	  	$('div.card-main-container > div > div > div.wrapper > div > div.right > span').each(function (e, x) {
+			wordsTotal += $(x).text().split(' / ')[0];
+	  	});
+        $('.left .number').text(wordsTotal);
         $('.left .text').text('words all time');
+        
         $('.right .text').text('words today');
 
         var d = new Date();
