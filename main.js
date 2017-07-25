@@ -6,9 +6,9 @@ $(function(){
     var pn = location.pathname;
     if (pn == '/home/') {
         var wordsTotal = 0;  
-	  	$('div.card-main-container > div > div > div.wrapper > div > div.right > span').each(function (e, x) {
-			wordsTotal += $(x).text().split(' / ')[0];
-	  	});
+	$('div.card-main-container > div > div > div.wrapper > div > div.right > span').each(function (e, x) {
+		wordsTotal += $(x).text().split(' / ')[0];
+	});
         $('.left .number').text(wordsTotal);
         $('.left .text').text('words all time');
         
