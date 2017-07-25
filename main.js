@@ -5,11 +5,16 @@
 $(function(){
     var pn = location.pathname;
     if (pn == '/home/') {
-        var wordsTotal = 0;  
-	$('div.card-main-container > div > div > div.wrapper > div > div.right > span').each(function (e, x) {
-		wordsTotal += $(x).text().split(' / ')[0];
+    	var difficultWords = 0;
+    	$('div.card-bottom > div > a.button.orange.disabled-click-thru.img-and-text > span.text').each(function (i, e) {
+		difficultWords += parseInt($(e).text());
 	});
-        $('.left .number').text(wordsTotal);
+	    
+        var wordsTotal = 0;  
+	$('div.card-main-container > div > div > div.wrapper > div > div.right > span').each(function (i, e) {
+		wordsTotal += parseInt($(e).text().split(' / ')[0]);
+	});
+        $('.left .number').text(wordsTotal - difficultWords);
         $('.left .text').text('words all time');
         
         $('.right .text').text('words today');
