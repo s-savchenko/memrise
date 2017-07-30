@@ -1,38 +1,41 @@
-/**
- * Created by savchenko on 09.05.17.
- */
-
 $(function(){
-    var pn = location.pathname;
-    if (pn == '/home/') {
-    	var difficultWords = 0;
-    	$('div.card-bottom > div > a.button.orange.disabled-click-thru.img-and-text > span.text').each(function (i, e) {
-		difficultWords += parseInt($(e).text());
-	});
-	    
-        var wordsTotal = 0;  
-	$('div.card-main-container > div > div > div.wrapper > div > div.right > span').each(function (i, e) {
-		wordsTotal += parseInt($(e).text().split(' / ')[0]);
-	});
-        $('.left .number').text(wordsTotal - difficultWords);
-        $('.left .text').text('words all time');
-        
-        $('.right .text').text('words today');
+    let pn = location.pathname;
+    if (pn === '/home/') {
+        let wordsTotal = 0;
+        $.ajax({
+            async: false,
+            url: 'https://www.memrise.com/ajax/courses/dashboard/?courses_filter=learning&category_id=6',
+            success: function(data) {
+                let difficult = 0;
+                let learned = 0;
+                for (let i = 0; i < data.courses.length; i++) {
+                    let course = data.courses[i];
+                    difficult += course.difficult === undefined ? 0 : course.difficult;
+                    learned += course.learned === undefined ? 0 : course.learned;
+                }
+                wordsTotal = learned - difficult;
+            }
+        });
 
-        var d = new Date();
-        var strDate = d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate();
-        if (localStorage.getItem('today') == null
-            || (localStorage.getItem('today') != null && localStorage.getItem('today') != strDate)) {
+        let wordsToday = 0;
+        let d = new Date();
+        let strDate = d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate();
+        if (localStorage.getItem('today') === null
+            || (localStorage.getItem('today') !== null && localStorage.getItem('today') !== strDate)) {
             localStorage.setItem('today', strDate);
-            localStorage.setItem('words', $('.left .number').text());
-            $('.right .number').text(0);
+            localStorage.setItem('wordsTotal', total);
         } else {
-            $('.right .number').text($('.left .number').text() - localStorage.getItem('words'));
+            wordsToday = wordsTotal - wordsToday;
         }
 
-        var goal = 4000;
-        var perc = $('.left .number').text() / goal * 100;
-        perc = perc.toFixed(1);
+        let goal = 4000;
+        let perc = (wordsTotal / goal * 100).toFixed(1);
+
+        $('.left .number').text(wordsTotal);
+        $('.left .text').text('words all time');
+
+        $('.right .number').text(wordsToday);
+        $('.right .text').text('words today');
 
         $('.content-stats').after(
             '<div class="content-stats"><div class="left">' +
