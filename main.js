@@ -23,9 +23,9 @@ $(function(){
         if (localStorage.getItem('today') === null
             || (localStorage.getItem('today') !== null && localStorage.getItem('today') !== strDate)) {
             localStorage.setItem('today', strDate);
-            localStorage.setItem('wordsTotal', total);
+            localStorage.setItem('wordsTotal', wordsTotal);
         } else {
-            wordsToday = wordsTotal - wordsToday;
+            wordsToday = wordsTotal - localStorage.getItem('wordsTotal');
         }
 
         let goal = 4000;
